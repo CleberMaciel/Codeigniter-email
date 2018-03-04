@@ -1,17 +1,30 @@
- public function enviar_email() {
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class User extends CI_Controller {
+
+    public function index() {
+        $this->load->helper('form');
+        $this->load->view('enviar_email');
+    }
+
+    public function enviar_email() {
         $this->load->library('email');
-        $mensagem = $this->load->view('emails/msg', $data, TRUE); //carrega uma view como mensagem
-        $mensagem = "mensagem";//mensagem em texto
-        $this->email->from("email@email", 'Name');
-        $this->email->subject("Subject");
-        $this->email->reply_to("email@email");
-        $this->email->to("email2@email2);
-        $this->email->cc('email@email');
-        $this->email->bcc('email@email');
+        
+        $email = $this->input->post("email");
+        
+        $mensagem = "Você recebeu um email especial.";
+        $this->email->from("email@gmail.com", 'Sua empresa/setor');
+        $this->email->subject("Assunto");
+        $this->email->to($email);
         $this->email->message($mensagem);
         if ($this->email->send()) {
-            redirect('/page');
+            $this->load->view('ok');
         } else {
             print_r($this->email->print_debugger());
         }
     }
+
+}
+
